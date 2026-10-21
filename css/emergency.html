@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency SOS & Hospital Directory - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn active"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2.5rem;">
+      
+      <!-- High Priority SOS Banner -->
+      <div class="sos-banner">
+        <h2><i class="fa-solid fa-triangle-exclamation"></i> MUMBAI EMERGENCY SOS</h2>
+        <p style="font-size: 1.15rem; max-width: 600px; margin: 0 auto; opacity: 0.95;">
+          Direct connection to unified national emergency response and Greater Mumbai safety services.
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;">
+          <!-- Direct Dial 112 -->
+          <a href="tel:112" class="sos-dial-btn">
+            <i class="fa-solid fa-phone-volume fa-shake"></i> Call National SOS: 112
+          </a>
+
+          <!-- WhatsApp Live Location Share -->
+          <button id="whatsapp-sos-btn" class="sos-dial-btn" style="background: #22c55e; color: white;">
+            <i class="fa-brands fa-whatsapp"></i> Share GPS via WhatsApp
+          </button>
+        </div>
+
+        <div id="gps-status-text" style="font-size: 0.85rem; margin-top: 1rem; opacity: 0.85;">
+          GPS ready: Tap WhatsApp button to send your exact Google Maps link to loved ones or trusted contacts.
+        </div>
+      </div>
+
+      <!-- Static Architecture Notice -->
+      <div class="alert alert-info">
+        <i class="fa-solid fa-shield-halved" style="font-size: 1.3rem;"></i>
+        <div>
+          <strong>Transparent Static Architecture Notice:</strong>
+          All numbers trigger native phone dialers (`tel:`) directly from your device. Your live GPS location is computed strictly in your local browser and shared only through your personal WhatsApp or messaging apps.
+        </div>
+      </div>
+
+      <!-- Emergency Numbers Grid -->
+      <div style="margin-bottom: 3.5rem;">
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 1.25rem;">
+          <i class="fa-solid fa-phone-flip" style="color: var(--danger);"></i> Mumbai Quick-Dial Helplines
+        </h3>
+
+        <div class="emergency-grid" id="helplines-grid">
+          <!-- Rendered by JS from emergency.json -->
+        </div>
+      </div>
+
+      <!-- Top Mumbai Suburban Multi-Speciality Hospitals -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <h3 style="font-size: 1.4rem; font-weight: 800;">
+              <i class="fa-solid fa-hospital" style="color: var(--danger);"></i> 24/7 Trauma & Casualty Hospital Directory
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Accredited tertiary-care hospitals with around-the-clock emergency casualty wards across Mumbai and Suburbs.
+            </p>
+          </div>
+
+          <div style="min-width: 200px;">
+            <select id="hospital-zone-filter" class="form-select">
+              <option value="all">All Mumbai Regions</option>
+              <option value="South Mumbai">South Mumbai</option>
+              <option value="Central Mumbai">Central Mumbai</option>
+              <option value="Western Suburbs">Western Suburbs</option>
+              <option value="Thane">Thane</option>
+              <option value="Navi Mumbai">Navi Mumbai</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="catalog-grid" id="hospitals-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let emergencyData = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('data/emergency.json');
+        emergencyData = await res.json();
+        renderHelplines();
+        renderHospitals('all');
+      } catch (e) {
+        console.error('Failed to load emergency contacts', e);
+      }
+
+      // WhatsApp Location Share button
+      document.getElementById('whatsapp-sos-btn').addEventListener('click', shareLocationViaWhatsApp);
+
+      // Hospital zone filter
+      document.getElementById('hospital-zone-filter').addEventListener('change', (e) => {
+        renderHospitals(e.target.value);
+      });
+    });
+
+    function renderHelplines() {
+      const container = document.getElementById('helplines-grid');
+      container.innerHTML = '';
+
+      emergencyData.nationalHelplines.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `emergency-card ${item.priority === 'critical' ? 'critical' : ''}`;
+        card.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="badge ${item.priority === 'critical' ? 'badge-danger' : 'badge-neutral'}">
+              <i class="fa-solid ${item.icon}"></i> ${item.title}
+            </span>
+          </div>
+          <div class="emergency-number">${item.number}</div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); flex-grow: 1; margin-bottom: 1rem;">
+            ${item.description}
+          </p>
+          <a href="tel:${item.number}" class="btn btn-sm btn-danger btn-block">
+            <i class="fa-solid fa-phone"></i> Call Now
+          </a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderHospitals(zone) {
+      const container = document.getElementById('hospitals-grid');
+      container.innerHTML = '';
+
+      const filtered = zone === 'all'
+        ? emergencyData.hospitals
+        : emergencyData.hospitals.filter(h => h.zone.toLowerCase().includes(zone.toLowerCase()));
+
+      filtered.forEach(h => {
+        const card = document.createElement('div');
+        card.className = 'catalog-card';
+        card.innerHTML = `
+          <div class="catalog-card-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <span class="badge badge-danger">24/7 Casualty</span>
+              <span class="badge badge-neutral">${h.zone}</span>
+            </div>
+            <h3 class="catalog-card-title">${h.name}</h3>
+            <div class="catalog-card-meta">
+              <i class="fa-solid fa-location-dot" style="color: var(--danger);"></i> ${h.suburb}
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              <strong>Address:</strong> ${h.address}
+            </p>
+            <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 1rem;">
+              <strong>Key Services:</strong> ${h.facilities.join(', ')}
+            </div>
+            <div class="catalog-card-footer" style="flex-direction: column; gap: 0.5rem;">
+              <a href="tel:${h.casualtyPhone}" class="btn btn-danger btn-block btn-sm">
+                <i class="fa-solid fa-phone"></i> Direct Casualty: ${h.casualtyPhone}
+              </a>
+              <a href="${h.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block btn-sm">
+                <i class="fa-solid fa-diamond-turn-right"></i> Navigate on Google Maps
+              </a>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function shareLocationViaWhatsApp() {
+      const statusText = document.getElementById('gps-status-text');
+      statusText.innerText = 'Acquiring GPS coordinates for SOS message...';
+
+      if (!navigator.geolocation) {
+        window.open('https://wa.me/?text=EMERGENCY! I need urgent assistance in Mumbai. Please call me immediately!', '_blank');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          statusText.innerText = `GPS obtained: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+          const message = `EMERGENCY ALERT! I am currently visiting Mumbai and require urgent help. Here is my live Google Maps GPS location: https://maps.google.com/?q=${lat},${lng}`;
+          const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+          window.open(waUrl, '_blank');
+        },
+        (err) => {
+          statusText.innerText = 'GPS permission unavailable. Opening message with generic alert.';
+          const message = 'EMERGENCY ALERT! I am in Mumbai and require urgent help. Please contact me or dispatch local police (100) or emergency (112) immediately!';
+          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+        },
+        { timeout: 8000 }
+      );
+    }
+  </script>
+</body>
+</html>

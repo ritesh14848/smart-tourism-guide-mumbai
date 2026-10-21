@@ -1,0 +1,109 @@
+{
+  "modes": [
+    {
+      "id": "auto",
+      "name": "Auto-Rickshaw (Suburbs Only)",
+      "badge": "Suburban Favorite",
+      "baseFare": 23,
+      "baseDistanceKm": 1.5,
+      "ratePerKm": 15.33,
+      "nightSurchargePercent": 25,
+      "notes": "Allowed only in Western Suburbs (Bandra northwards) and Central/Eastern Suburbs (Sion northwards). Strictly NOT permitted in South Mumbai.",
+      "allowedZones": ["Western Suburbs", "Central Mumbai (North of Sion)", "Thane & Suburbs", "Navi Mumbai"]
+    },
+    {
+      "id": "kaali_peeli",
+      "name": "Kaali-Peeli Taxi (Black & Yellow Non-AC)",
+      "badge": "All Mumbai",
+      "baseFare": 28,
+      "baseDistanceKm": 1.5,
+      "ratePerKm": 18.66,
+      "nightSurchargePercent": 25,
+      "notes": "Available all over South Mumbai, Suburbs, and airport terminals. Runs by certified electronic meter.",
+      "allowedZones": ["South Mumbai", "Central Mumbai", "Western Suburbs", "Thane & Suburbs", "Navi Mumbai"]
+    },
+    {
+      "id": "cool_cab",
+      "name": "AC Cool Cab / App Cab (Uber/Ola)",
+      "badge": "AC Comfort",
+      "baseFare": 35,
+      "baseDistanceKm": 1.5,
+      "ratePerKm": 23.50,
+      "nightSurchargePercent": 25,
+      "notes": "Air-conditioned cab service ideal for humid afternoons and Bandra-Worli Sea Link commutes.",
+      "allowedZones": ["South Mumbai", "Central Mumbai", "Western Suburbs", "Thane & Suburbs", "Navi Mumbai"]
+    },
+    {
+      "id": "local_train",
+      "name": "Mumbai Suburban Local Train",
+      "badge": "Lifeline of Mumbai",
+      "baseFare": 5,
+      "baseDistanceKm": 10,
+      "ratePerKm": 0.25,
+      "flatSlabs": [
+        {"maxKm": 10, "secondClass": 5, "firstClass": 50, "acLocal": 35},
+        {"maxKm": 25, "secondClass": 10, "firstClass": 105, "acLocal": 70},
+        {"maxKm": 45, "secondClass": 15, "firstClass": 140, "acLocal": 95},
+        {"maxKm": 75, "secondClass": 20, "firstClass": 170, "acLocal": 115}
+      ],
+      "notes": "Fastest way to beat road traffic. Avoid peak hours (8:30-10:30 AM south-bound & 6:00-8:30 PM north-bound). AC locals are comfortable and safe.",
+      "allowedZones": ["All Mumbai Transit Corridors"]
+    },
+    {
+      "id": "metro",
+      "name": "Mumbai Metro (AC Elevated & Underground)",
+      "badge": "Modern Transit",
+      "baseFare": 10,
+      "baseDistanceKm": 3,
+      "ratePerKm": 1.5,
+      "flatSlabs": [
+        {"maxKm": 3, "fare": 10},
+        {"maxKm": 12, "fare": 20},
+        {"maxKm": 18, "fare": 30},
+        {"maxKm": 25, "fare": 40},
+        {"maxKm": 35, "fare": 50}
+      ],
+      "notes": "Air-conditioned, modern, timely network covering Line 1 (Versova-Ghatkopar), Line 2A & Line 7 (Western Suburbs), Line 3 Aqua Line.",
+      "allowedZones": ["Suburban Metro Network"]
+    },
+    {
+      "id": "best_bus",
+      "name": "BEST Electric AC Bus",
+      "badge": "Green & Budget",
+      "baseFare": 6,
+      "baseDistanceKm": 5,
+      "ratePerKm": 1.2,
+      "flatSlabs": [
+        {"maxKm": 5, "fare": 6},
+        {"maxKm": 10, "fare": 13},
+        {"maxKm": 15, "fare": 19},
+        {"maxKm": 25, "fare": 25}
+      ],
+      "notes": "Extensive red electric bus fleet operated by Brihanmumbai Electric Supply and Transport with Chalo App digital ticketing.",
+      "allowedZones": ["All Mumbai"]
+    },
+    {
+      "id": "ferry",
+      "name": "Elephanta Island Ferry (Round Trip)",
+      "badge": "Harbour Cruise",
+      "baseFare": 260,
+      "baseDistanceKm": 11,
+      "ratePerKm": 0,
+      "notes": "Leaves every 30 minutes from Gateway of India Jetty No. 5 to Elephanta Caves. Upper deck view charge +₹10.",
+      "allowedZones": ["Gateway of India to Elephanta Island"]
+    }
+  ],
+  "landmarks": [
+    {"name": "Gateway of India (Colaba)", "zone": "South Mumbai", "lat": 18.9220, "lng": 72.8347},
+    {"name": "CSMT Station (Fort)", "zone": "South Mumbai", "lat": 18.9400, "lng": 72.8353},
+    {"name": "Marine Drive / Chowpatty", "zone": "South Mumbai", "lat": 18.9432, "lng": 72.8230},
+    {"name": "Dadar Station / Shivaji Park", "zone": "Central Mumbai", "lat": 19.0180, "lng": 72.8430},
+    {"name": "Bandra Bandstand / Station", "zone": "Western Suburbs", "lat": 19.0531, "lng": 72.8290},
+    {"name": "Juhu Beach", "zone": "Western Suburbs", "lat": 19.0988, "lng": 72.8264},
+    {"name": "Mumbai Airport Terminal 2 (T2)", "zone": "Western Suburbs", "lat": 19.0901, "lng": 72.8687},
+    {"name": "Andheri Station / Metro Hub", "zone": "Western Suburbs", "lat": 19.1197, "lng": 72.8464},
+    {"name": "Borivali Station / Sanjay Gandhi National Park", "zone": "Western Suburbs", "lat": 19.2288, "lng": 72.8576},
+    {"name": "Thane Station / Upvan", "zone": "Thane & Suburbs", "lat": 19.2198, "lng": 72.9642},
+    {"name": "Vashi / Navi Mumbai Center", "zone": "Navi Mumbai", "lat": 19.0760, "lng": 72.9985}
+  ]
+}

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Explore Mumbai & Transit Fare Calculator - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link active"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2.5rem;">
+      
+      <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+        <span class="section-subtitle">Directory & Transit Guidance</span>
+        <h1 class="section-title">Explore Mumbai & Suburbs</h1>
+        <p style="color: var(--text-muted); margin-top: 0.5rem;">
+          Discover curated attractions, heritage stays, local street eateries, and calculate official transit fares across all Mumbai corridors.
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="day-tabs" id="explore-type-tabs" style="margin-bottom: 1.5rem;">
+        <button class="day-tab-btn active" data-type="attractions"><i class="fa-solid fa-landmark"></i> Attractions</button>
+        <button class="day-tab-btn" data-type="hotels"><i class="fa-solid fa-hotel"></i> Hotels & Stays</button>
+        <button class="day-tab-btn" data-type="restaurants"><i class="fa-solid fa-utensils"></i> Iconic Food & Chaat</button>
+        <button class="day-tab-btn" data-type="fare"><i class="fa-solid fa-calculator"></i> Mumbai Fare Calculator</button>
+      </div>
+
+      <!-- Search & Zone Filters (Hidden when fare calculator tab is active) -->
+      <div id="filter-bar" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+        <div style="flex: 2; min-width: 250px; position: relative;">
+          <input type="text" id="search-input" class="form-control" placeholder="Search by name, suburb (e.g. Bandra, Colaba), cuisine, tag..." style="padding-left: 2.5rem;">
+          <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+        </div>
+
+        <div style="flex: 1; min-width: 180px;">
+          <select id="zone-filter" class="form-select">
+            <option value="all">All Mumbai Zones</option>
+            <option value="South Mumbai">South Mumbai (SoBo)</option>
+            <option value="Western Suburbs">Western Suburbs</option>
+            <option value="Central Mumbai">Central Mumbai</option>
+            <option value="Thane">Thane & Suburbs</option>
+            <option value="Navi Mumbai">Navi Mumbai</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Explore Directory Grid -->
+      <div class="catalog-grid" id="directory-grid">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+      <!-- Interactive Fare Calculator Section (Shown on Fare tab) -->
+      <div id="fare-calculator-section" style="display: none;">
+        <div class="fare-calculator-box">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+            <div style="width: 44px; height: 44px; background: var(--primary-light); color: var(--primary); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+              <i class="fa-solid fa-taxi"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 1.4rem; font-weight: 800;">Official Mumbai Transit Fare Estimator</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Calculated using active Maharashtra Transport Department rates for Autos, Kaali-Peeli Taxis, AC Cool Cabs, Local Trains & BEST Buses.
+              </p>
+            </div>
+          </div>
+
+          <form id="fare-form">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+              <!-- Transit Mode -->
+              <div class="form-group">
+                <label class="form-label">Select Transit Mode</label>
+                <select id="fare-mode" class="form-select">
+                  <option value="auto">Auto-Rickshaw (Suburbs only - Base ₹23)</option>
+                  <option value="kaali_peeli" selected>Kaali-Peeli Taxi (All Mumbai - Base ₹28)</option>
+                  <option value="cool_cab">AC Cool Cab / App Taxi (Base ₹35)</option>
+                  <option value="local_train">Mumbai Suburban Local Train (₹5 - ₹20)</option>
+                  <option value="metro">Mumbai Metro Line (₹10 - ₹50)</option>
+                  <option value="best_bus">BEST AC Electric Bus (₹6 - ₹25)</option>
+                  <option value="ferry">Elephanta Island Ferry (₹260 Return)</option>
+                </select>
+              </div>
+
+              <!-- From Landmark Preset -->
+              <div class="form-group">
+                <label class="form-label">Pick-up Landmark (or enter km)</label>
+                <select id="fare-from" class="form-select">
+                  <option value="custom">-- Custom Distance in Km --</option>
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <!-- To Landmark Preset -->
+              <div class="form-group">
+                <label class="form-label">Drop-off Landmark</label>
+                <select id="fare-to" class="form-select">
+                  <option value="custom">-- Custom Distance in Km --</option>
+                  <!-- Populated by JS -->
+                </select>
+              </div>
+
+              <!-- Distance Input (km) -->
+              <div class="form-group">
+                <label class="form-label">Distance (Kilometers)</label>
+                <input type="number" id="fare-distance" class="form-control" value="8.5" min="0.5" max="120" step="0.5">
+              </div>
+            </div>
+
+            <!-- Night Travel Surcharge Checkbox -->
+            <div style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+              <label class="check-pill" style="display: inline-flex;">
+                <input type="checkbox" id="fare-night-toggle">
+                <span><i class="fa-solid fa-moon"></i> Night Travel (12:00 Midnight - 5:00 AM &bull; 25% RTO Surcharge)</span>
+              </label>
+            </div>
+
+            <button type="button" id="calc-fare-btn" class="btn btn-primary btn-lg">
+              <i class="fa-solid fa-calculator"></i> Calculate Estimated Fare
+            </button>
+          </form>
+
+          <!-- Result Card -->
+          <div id="fare-result-container" style="margin-top: 1.5rem;">
+            <!-- Populated by fare.js -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/fare.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentTab = 'attractions';
+    let attractionsData = [];
+    let hotelsData = [];
+    let restaurantsData = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await FareService.init();
+      initLandmarkPresets();
+      await loadExploreData();
+
+      // Check URL query parameters (e.g. ?zone=South+Mumbai)
+      const urlParams = new URLSearchParams(window.location.search);
+      const zoneParam = urlParams.get('zone');
+      if (zoneParam) {
+        document.getElementById('zone-filter').value = zoneParam;
+      }
+
+      // Check hash (e.g. #fare-calc)
+      if (window.location.hash === '#fare-calc') {
+        switchTab('fare');
+      } else {
+        renderDirectory();
+      }
+
+      // Tab switcher
+      const tabBtns = document.querySelectorAll('#explore-type-tabs .day-tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          switchTab(btn.getAttribute('data-type'));
+        });
+      });
+
+      // Filter events
+      document.getElementById('search-input').addEventListener('input', renderDirectory);
+      document.getElementById('zone-filter').addEventListener('change', renderDirectory);
+
+      // Fare Calculator Listeners
+      document.getElementById('calc-fare-btn').addEventListener('click', runFareCalculation);
+      document.getElementById('fare-mode').addEventListener('change', runFareCalculation);
+      document.getElementById('fare-night-toggle').addEventListener('change', runFareCalculation);
+      document.getElementById('fare-distance').addEventListener('input', runFareCalculation);
+
+      document.getElementById('fare-from').addEventListener('change', updatePresetDistance);
+      document.getElementById('fare-to').addEventListener('change', updatePresetDistance);
+
+      // Trigger initial fare
+      runFareCalculation();
+    });
+
+    function switchTab(type) {
+      currentTab = type;
+      const filterBar = document.getElementById('filter-bar');
+      const dirGrid = document.getElementById('directory-grid');
+      const fareSection = document.getElementById('fare-calculator-section');
+
+      if (type === 'fare') {
+        filterBar.style.display = 'none';
+        dirGrid.style.display = 'none';
+        fareSection.style.display = 'block';
+      } else {
+        filterBar.style.display = 'flex';
+        dirGrid.style.display = 'grid';
+        fareSection.style.display = 'none';
+        renderDirectory();
+      }
+    }
+
+    async function loadExploreData() {
+      try {
+        const [aRes, hRes, rRes] = await Promise.all([
+          fetch('data/attractions.json'),
+          fetch('data/hotels.json'),
+          fetch('data/restaurants.json')
+        ]);
+        attractionsData = await aRes.json();
+        hotelsData = await hRes.json();
+        restaurantsData = await rRes.json();
+      } catch (e) {
+        console.error('Failed to load explore data', e);
+      }
+    }
+
+    function initLandmarkPresets() {
+      if (!FareService.transportData || !FareService.transportData.landmarks) return;
+      const fromSel = document.getElementById('fare-from');
+      const toSel = document.getElementById('fare-to');
+
+      FareService.transportData.landmarks.forEach((lm, idx) => {
+        const opt1 = document.createElement('option');
+        opt1.value = lm.name;
+        opt1.text = `${lm.name} (${lm.zone})`;
+        if (idx === 0) opt1.selected = true;
+        fromSel.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = lm.name;
+        opt2.text = `${lm.name} (${lm.zone})`;
+        if (idx === 4) opt2.selected = true; // Bandra default
+        toSel.appendChild(opt2);
+      });
+
+      updatePresetDistance();
+    }
+
+    function updatePresetDistance() {
+      const fromName = document.getElementById('fare-from').value;
+      const toName = document.getElementById('fare-to').value;
+
+      if (fromName !== 'custom' && toName !== 'custom' && FareService.transportData) {
+        const fromLm = FareService.transportData.landmarks.find(l => l.name === fromName);
+        const toLm = FareService.transportData.landmarks.find(l => l.name === toName);
+
+        if (fromLm && toLm) {
+          const dist = FareService.calculateHaversineDistance(fromLm.lat, fromLm.lng, toLm.lat, toLm.lng);
+          // Road distance in Mumbai is typically 1.35x aerial distance due to bay & coastal contours
+          const roadDist = parseFloat((dist * 1.35).toFixed(1));
+          document.getElementById('fare-distance').value = Math.max(1, roadDist);
+        }
+      }
+      runFareCalculation();
+    }
+
+    function runFareCalculation() {
+      const modeId = document.getElementById('fare-mode').value;
+      const distance = document.getElementById('fare-distance').value;
+      const isNight = document.getElementById('fare-night-toggle').checked;
+      const fromLm = document.getElementById('fare-from').value;
+      const toLm = document.getElementById('fare-to').value;
+
+      const result = FareService.calculateFare({
+        modeId,
+        distanceKm: distance,
+        isNight,
+        fromLandmark: fromLm,
+        toLandmark: toLm
+      });
+
+      const container = document.getElementById('fare-result-container');
+      if (!result) {
+        container.innerHTML = '<p class="text-muted">Unable to calculate fare.</p>';
+        return;
+      }
+
+      container.innerHTML = `
+        ${result.warning ? `
+          <div class="alert alert-warning" style="margin-bottom: 1rem;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.25rem;"></i>
+            <div>${result.warning}</div>
+          </div>
+        ` : ''}
+
+        <div class="fare-result-display">
+          <div>
+            <span class="badge badge-accent" style="margin-bottom: 6px;">${result.modeName}</span>
+            <div style="font-size: 1.1rem; opacity: 0.95;">Estimated Transit Fare</div>
+            <div style="font-size: 0.85rem; opacity: 0.8; margin-top: 4px;">
+              ${result.breakdown}
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div class="fare-amount">₹${result.fare}</div>
+            <div style="font-size: 0.8rem; opacity: 0.85;">${result.distanceKm} km route</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDirectory() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const zoneFilter = document.getElementById('zone-filter').value;
+      const grid = document.getElementById('directory-grid');
+      grid.innerHTML = '';
+
+      let items = [];
+      if (currentTab === 'attractions') items = attractionsData;
+      else if (currentTab === 'hotels') items = hotelsData;
+      else if (currentTab === 'restaurants') items = restaurantsData;
+
+      const filtered = items.filter(item => {
+        const matchesQuery = !query || 
+          item.name.toLowerCase().includes(query) ||
+          item.suburb.toLowerCase().includes(query) ||
+          (item.category && item.category.toLowerCase().includes(query)) ||
+          (item.cuisine && item.cuisine.toLowerCase().includes(query)) ||
+          (item.specialty && item.specialty.toLowerCase().includes(query)) ||
+          (item.tags && item.tags.some(t => t.toLowerCase().includes(query)));
+
+        const matchesZone = zoneFilter === 'all' || item.zone.toLowerCase().includes(zoneFilter.toLowerCase());
+
+        return matchesQuery && matchesZone;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+            <h3>No results found</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Try adjusting your search terms or zone filters.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'catalog-card';
+
+        if (currentTab === 'attractions') {
+          card.innerHTML = `
+            <div class="catalog-card-body">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="badge badge-primary">${item.category}</span>
+                <span style="font-weight: 700; font-size: 0.85rem; color: #f59e0b;">⭐ ${item.rating}</span>
+              </div>
+              <h3 class="catalog-card-title">${item.name}</h3>
+              <div class="catalog-card-meta">
+                <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> ${item.suburb} &bull; ${item.zone}
+              </div>
+              <p class="catalog-card-desc">${item.description}</p>
+              <div class="catalog-card-footer">
+                <span style="font-size: 0.9rem; font-weight: 700;">
+                  🎫 ${item.entryFee === 0 ? 'Free Entry' : '₹' + item.entryFee}
+                </span>
+                <a href="map.html" class="btn btn-sm btn-outline">
+                  <i class="fa-solid fa-map-pin"></i> Locate
+                </a>
+              </div>
+            </div>
+          `;
+        } else if (currentTab === 'hotels') {
+          card.innerHTML = `
+            <div class="catalog-card-body">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="badge badge-success">${item.category}</span>
+                <span style="font-weight: 700; font-size: 0.85rem; color: #f59e0b;">⭐ ${item.rating}</span>
+              </div>
+              <h3 class="catalog-card-title">${item.name}</h3>
+              <div class="catalog-card-meta">
+                <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> ${item.suburb}
+              </div>
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                <strong>Amenities:</strong> ${item.amenities.slice(0, 3).join(', ')}...
+              </div>
+              <div class="catalog-card-footer">
+                <div>
+                  <span style="font-size: 1.15rem; font-weight: 800; color: #047857;">₹${item.pricePerNight.toLocaleString()}</span>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">/ night</span>
+                </div>
+                <a href="tel:${item.contact}" class="btn btn-sm btn-primary">
+                  <i class="fa-solid fa-phone"></i> Call
+                </a>
+              </div>
+            </div>
+          `;
+        } else if (currentTab === 'restaurants') {
+          card.innerHTML = `
+            <div class="catalog-card-body">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span class="badge badge-accent">${item.cuisine}</span>
+                <span style="font-weight: 700; font-size: 0.85rem; color: #f59e0b;">⭐ ${item.rating}</span>
+              </div>
+              <h3 class="catalog-card-title">${item.name}</h3>
+              <div class="catalog-card-meta">
+                <i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> ${item.suburb} &bull; ${item.priceRange}
+              </div>
+              <p class="catalog-card-desc">${item.description}</p>
+              <div style="font-size: 0.85rem; margin-bottom: 0.75rem;">
+                <strong>Must Try:</strong> ${item.specialty}
+              </div>
+              <div class="catalog-card-footer">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                  Avg for 2: <strong>₹${item.avgCostForTwo}</strong>
+                </span>
+                <a href="map.html" class="btn btn-sm btn-outline">
+                  <i class="fa-solid fa-location-arrow"></i> Map
+                </a>
+              </div>
+            </div>
+          `;
+        }
+
+        grid.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

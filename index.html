@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Tourism Guide: Mumbai & Suburbs</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="badge badge-accent" style="margin-bottom: 1rem; font-size: 0.85rem;">
+            <i class="fa-solid fa-bolt"></i> Smart Client-Side Travel Planner
+          </span>
+          <h1 class="hero-title">Experience the Spirit of <span>Mumbai & Its Suburbs</span></h1>
+          <p class="hero-subtitle">
+            Personalized, budget-optimized, day-wise itineraries with spatial clustering. Beat the traffic, explore historic SoBo heritage, relax along Bandra promenades, trek Kanheri Caves, and savor authentic street flavors.
+          </p>
+          <div class="hero-cta-group">
+            <a href="planner.html" class="btn btn-accent btn-lg">
+              <i class="fa-solid fa-sparkles"></i> Create My Mumbai Plan
+            </a>
+            <a href="explore.html" class="btn btn-outline-white btn-lg">
+              <i class="fa-solid fa-magnifying-glass"></i> Explore Attractions & Fare
+            </a>
+          </div>
+        </div>
+
+        <!-- Live Mumbai Weather Widget -->
+        <div class="hero-weather-card" id="mumbai-weather-widget">
+          <!-- Populated by weather.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works (Activity Diagram Flow) -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-subtitle">Intelligent Flow</span>
+          <h2 class="section-title">How Your Journey Unfolds</h2>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">
+            From preference input to satisfaction approval, live navigation, and safe return.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+          <div class="card" style="text-align: center;">
+            <div style="width: 50px; height: 50px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.3rem;">
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <h4 style="margin-bottom: 0.5rem;">1. Smart Input & Validation</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              Set duration, budget, and interests. Real-time checks ensure budget feasibility before proceeding.
+            </p>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="width: 50px; height: 50px; background: var(--accent-light); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.3rem;">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <h4 style="margin-bottom: 0.5rem;">2. Spatial Clustering</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              Algorithm groups stops by geographic proximity (SoBo, Bandra, Borivali) to eliminate wasteful cross-city commutes.
+            </p>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="width: 50px; height: 50px; background: var(--warning-light); color: var(--warning); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.3rem;">
+              <i class="fa-solid fa-rotate"></i>
+            </div>
+            <h4 style="margin-bottom: 0.5rem;">3. Satisfied? Or Modify</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              Review estimated costs and timings. Re-tune preferences seamlessly or click <em>Begin Trip</em> to lock in your adventure.
+            </p>
+          </div>
+
+          <div class="card" style="text-align: center;">
+            <div style="width: 50px; height: 50px; background: var(--success-light); color: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.3rem;">
+              <i class="fa-solid fa-person-walking-luggage"></i>
+            </div>
+            <h4 style="margin-bottom: 0.5rem;">4. In-Trip Companion</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              Live GPS map tracking, local fare estimations, voice Marathi translation, and one-tap 24/7 SOS helpline.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Suburb Highlights Grid -->
+    <section class="section" style="background-color: var(--bg-subtle);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-subtitle">Mumbai Geography</span>
+          <h2 class="section-title">Explore by City Zones</h2>
+        </div>
+
+        <div class="catalog-grid">
+          <div class="catalog-card">
+            <div class="catalog-card-body">
+              <span class="badge badge-primary" style="margin-bottom: 0.5rem;">Zone 1</span>
+              <h3 class="catalog-card-title">South Mumbai (SoBo)</h3>
+              <p class="catalog-card-desc">
+                Gateway of India, Victorian Gothic CSMT, Kala Ghoda art precinct, Marine Drive sunset walks, and legendary Irani cafes like Leopold & Britannia.
+              </p>
+              <div class="catalog-card-footer">
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Heritage & Marine Vibe</span>
+                <a href="explore.html?zone=South+Mumbai" class="btn btn-sm btn-outline">View Spots &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="catalog-card">
+            <div class="catalog-card-body">
+              <span class="badge badge-accent" style="margin-bottom: 0.5rem;">Zone 2</span>
+              <h3 class="catalog-card-title">Western Suburbs (Bandra to Juhu)</h3>
+              <p class="catalog-card-desc">
+                Bandra Bandstand, Portuguese colonial cottages, Mount Mary Church, Carter Road sea walks, Juhu Beach street food stalls, and ISKCON sanctuary.
+              </p>
+              <div class="catalog-card-footer">
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--accent);">Bollywood & Coastal</span>
+                <a href="explore.html?zone=Western+Suburbs" class="btn btn-sm btn-outline">View Spots &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="catalog-card">
+            <div class="catalog-card-body">
+              <span class="badge badge-success" style="margin-bottom: 0.5rem;">Zone 3</span>
+              <h3 class="catalog-card-title">Borivali & National Park</h3>
+              <p class="catalog-card-desc">
+                Sanjay Gandhi National Park rainforest, 2,000-year-old Buddhist Kanheri Caves, and the serene Global Vipassana Pagoda at Gorai creek.
+              </p>
+              <div class="catalog-card-footer">
+                <span style="font-size: 0.85rem; font-weight: 600; color: var(--success);">Nature & Ancient Caves</span>
+                <a href="explore.html?zone=Western+Suburbs" class="btn btn-sm btn-outline">View Spots &rarr;</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community & Local Impact Banner -->
+    <section class="section">
+      <div class="container">
+        <div class="card" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; border: none; padding: 2.5rem;">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem;">
+            <div style="max-width: 650px;">
+              <span class="badge badge-success" style="margin-bottom: 0.75rem;">
+                <i class="fa-solid fa-hand-holding-heart"></i> Community Impact
+              </span>
+              <h3 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem;">
+                Empowering Local Mumbai Businesses & Artisans
+              </h3>
+              <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+                Our itineraries directly prioritize indigenous Koli fishing villages, third-generation family bakeries, certified metered kaali-peeli drivers, and municipal heritage sites. Travel responsibly and leave a positive footprint on Mumbai's vibrant local economy.
+              </p>
+            </div>
+            <div>
+              <a href="planner.html" class="btn btn-accent btn-lg">
+                <i class="fa-solid fa-route"></i> Plan a Responsible Trip
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h4><i class="fa-solid fa-compass" style="color: #38bdf8;"></i> Smart Tourism Guide: Mumbai</h4>
+          <p>
+            A high-performance, client-side static web application designed for tourists and locals exploring Greater Mumbai, Western Suburbs, Central Mumbai, and Thane.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h5>Quick Navigation</h5>
+          <ul>
+            <li><a href="planner.html">Trip Planner</a></li>
+            <li><a href="itinerary.html">My Day-wise Plan</a></li>
+            <li><a href="explore.html">Attractions Directory</a></li>
+            <li><a href="map.html">Interactive Map</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h5>Travel Essentials</h5>
+          <ul>
+            <li><a href="explore.html#fare-calc">Fare Calculator</a></li>
+            <li><a href="translate.html">Voice Translator</a></li>
+            <li><a href="expense.html">Expense Tracker</a></li>
+            <li><a href="emergency.html" style="color: #f87171; font-weight: 700;">Emergency SOS (112)</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Open Source & Static Architecture.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      WeatherService.renderWeatherWidget('mumbai-weather-widget');
+    });
+  </script>
+</body>
+</html>

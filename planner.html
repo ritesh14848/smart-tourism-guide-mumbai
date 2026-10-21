@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan Your Mumbai Trip - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link active"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="section" style="padding-top: 2.5rem;">
+      <div class="container" style="max-width: 800px;">
+        
+        <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+          <span class="section-subtitle">Intelligent Trip Generator</span>
+          <h1 class="section-title">Plan Your Mumbai & Suburbs Itinerary</h1>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">
+            Our rule-based engine splits your budget sensibly across stay, meals, and local transit while grouping stops geographically to minimize Mumbai traffic delays.
+          </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card" style="box-shadow: var(--shadow-md);">
+          
+          <!-- Validation Alert Container -->
+          <div id="validation-alert" style="display: none;"></div>
+
+          <form id="trip-planner-form">
+            <!-- Destination (Fixed for this project) -->
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-location-dot" style="color: var(--primary);"></i> Target Region</label>
+              <input type="text" class="form-control" value="Greater Mumbai & Suburbs (South Mumbai, Bandra, Borivali, Thane, Navi Mumbai)" readonly style="background-color: var(--bg-subtle); font-weight: 600;">
+              <span class="form-hint">Encompasses South Mumbai, Central Mumbai, Western Suburbs, Sanjay Gandhi National Park, and Thane.</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+              <!-- Duration -->
+              <div class="form-group">
+                <label for="trip-days" class="form-label"><i class="fa-solid fa-calendar-day" style="color: var(--primary);"></i> Trip Duration</label>
+                <select id="trip-days" class="form-select" required>
+                  <option value="1">1 Day (Express Tour)</option>
+                  <option value="2">2 Days (Weekend Explorer)</option>
+                  <option value="3" selected>3 Days (Classic Mumbai)</option>
+                  <option value="4">4 Days (City & Rainforest Caves)</option>
+                  <option value="5">5 Days (Comprehensive)</option>
+                  <option value="7">7 Days (Full Greater Mumbai)</option>
+                </select>
+                <span class="form-hint">Recommended: 3 to 4 days</span>
+              </div>
+
+              <!-- Travel Pace -->
+              <div class="form-group">
+                <label for="travel-pace" class="form-label"><i class="fa-solid fa-gauge-high" style="color: var(--primary);"></i> Travel Pace</label>
+                <select id="travel-pace" class="form-select">
+                  <option value="relaxed">Relaxed (2 stops/day + leisurely meals)</option>
+                  <option value="moderate" selected>Moderate (3 stops/day - Recommended)</option>
+                  <option value="packed">Packed (4 stops/day - Fast pace)</option>
+                </select>
+                <span class="form-hint">Adjusts daily schedule density</span>
+              </div>
+            </div>
+
+            <!-- Total Budget -->
+            <div class="form-group">
+              <label for="trip-budget" class="form-label">
+                <i class="fa-solid fa-indian-rupee-sign" style="color: var(--primary);"></i> Total Trip Budget (INR)
+              </label>
+              <div style="position: relative;">
+                <input type="number" id="trip-budget" class="form-control" placeholder="e.g. 12000" min="1100" max="500000" value="12000" required style="font-size: 1.15rem; font-weight: 700;">
+              </div>
+              <div id="budget-feasibility-hint" class="form-hint" style="color: #047857; font-weight: 600; margin-top: 0.5rem;">
+                Feasibility: ~₹4,000 / day (Covers mid-range hotel, iconic dining, auto/cabs, and entry fees).
+              </div>
+
+              <!-- Quick Budget Presets -->
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem;">
+                <button type="button" class="btn btn-sm btn-outline budget-preset-btn" data-budget="4500">₹4,500 (Hostel/Solo)</button>
+                <button type="button" class="btn btn-sm btn-outline budget-preset-btn" data-budget="12000">₹12,000 (Comfort)</button>
+                <button type="button" class="btn btn-sm btn-outline budget-preset-btn" data-budget="25000">₹25,000 (Premium)</button>
+                <button type="button" class="btn btn-sm btn-outline budget-preset-btn" data-budget="60000">₹60,000 (Luxury)</button>
+              </div>
+            </div>
+
+            <!-- Interests Checkboxes -->
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-heart" style="color: var(--accent);"></i> Select Your Interests (At least one)</label>
+              <div class="form-check-group">
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Heritage & Architecture" checked>
+                  <span><i class="fa-solid fa-landmark"></i> Heritage & Architecture</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Beaches & Promenades" checked>
+                  <span><i class="fa-solid fa-umbrella-beach"></i> Beaches & Sunset</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Museums & Culture" checked>
+                  <span><i class="fa-solid fa-palette"></i> Museums & Art</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Spiritual & Pilgrimage">
+                  <span><i class="fa-solid fa-om"></i> Shrines & Temples</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Parks & Nature">
+                  <span><i class="fa-solid fa-tree"></i> Rainforest & Caves</span>
+                </label>
+                <label class="check-pill">
+                  <input type="checkbox" name="interest" value="Shopping & Street Life" checked>
+                  <span><i class="fa-solid fa-bag-shopping"></i> Street Life & Food</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="margin-top: 2rem;">
+              <button type="submit" id="generate-btn" class="btn btn-accent btn-lg btn-block">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Optimized Day-wise Itinerary
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/planner.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const daysInput = document.getElementById('trip-days');
+      const budgetInput = document.getElementById('trip-budget');
+      const feasibilityHint = document.getElementById('budget-feasibility-hint');
+      const form = document.getElementById('trip-planner-form');
+      const alertContainer = document.getElementById('validation-alert');
+      const presetBtns = document.querySelectorAll('.budget-preset-btn');
+
+      // Pre-fill from previous session if modifying preferences
+      const savedPrefs = StorageService.getPreferences();
+      if (savedPrefs) {
+        if (savedPrefs.days) daysInput.value = savedPrefs.days;
+        if (savedPrefs.budget) budgetInput.value = savedPrefs.budget;
+        if (savedPrefs.pace) document.getElementById('travel-pace').value = savedPrefs.pace;
+        if (savedPrefs.interests && savedPrefs.interests.length > 0) {
+          const checkboxes = document.querySelectorAll('input[name="interest"]');
+          checkboxes.forEach(cb => {
+            cb.checked = savedPrefs.interests.includes(cb.value);
+          });
+        }
+      }
+
+      // Live Budget Feasibility Feedback
+      function updateFeasibility() {
+        const days = parseInt(daysInput.value, 10) || 1;
+        const budget = parseFloat(budgetInput.value) || 0;
+        const perDay = Math.round(budget / days);
+        const minReq = days * PlannerService.MIN_DAILY_BUDGET;
+
+        if (budget < minReq) {
+          feasibilityHint.style.color = '#dc2626';
+          feasibilityHint.innerHTML = `⚠️ Low Budget Alert: Minimum required for ${days} days is ₹${minReq.toLocaleString()} (₹${PlannerService.MIN_DAILY_BUDGET}/day for basic hostel dorm, street meals & local transit).`;
+        } else if (perDay < 2000) {
+          feasibilityHint.style.color = '#b45309';
+          feasibilityHint.innerHTML = `💡 Budget Mode: ~₹${perDay.toLocaleString()} / day (Hostel stays, Mumbai local train, and street snacks).`;
+        } else if (perDay < 6000) {
+          feasibilityHint.style.color = '#047857';
+          feasibilityHint.innerHTML = `✨ Comfortable: ~₹${perDay.toLocaleString()} / day (Mid-range hotel, iconic dining, taxis, and attractions).`;
+        } else {
+          feasibilityHint.style.color = '#0284c7';
+          feasibilityHint.innerHTML = `🌟 Premium / Luxury: ~₹${perDay.toLocaleString()} / day (5-star heritage stays, gourmet coastal seafood, and AC cabs).`;
+        }
+      }
+
+      daysInput.addEventListener('change', updateFeasibility);
+      budgetInput.addEventListener('input', updateFeasibility);
+      updateFeasibility();
+
+      // Budget presets
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          budgetInput.value = btn.getAttribute('data-budget');
+          updateFeasibility();
+        });
+      });
+
+      // Handle form submission
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertContainer.style.display = 'none';
+        alertContainer.innerHTML = '';
+
+        const selectedInterests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(cb => cb.value);
+        const days = daysInput.value;
+        const budget = budgetInput.value;
+        const pace = document.getElementById('travel-pace').value;
+
+        const generateBtn = document.getElementById('generate-btn');
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing Zones & Computing Optimal Plan...';
+
+        const result = await PlannerService.generateItinerary({
+          days,
+          budget,
+          pace,
+          interests: selectedInterests
+        });
+
+        if (!result.success) {
+          generateBtn.disabled = false;
+          generateBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Generate Optimized Day-wise Itinerary';
+          
+          alertContainer.style.display = 'block';
+          alertContainer.innerHTML = `
+            <div class="alert alert-danger">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.25rem;"></i>
+              <div>
+                <strong>Please check your inputs:</strong>
+                <ul style="margin-top: 0.25rem; padding-left: 1.25rem;">
+                  ${result.errors.map(err => `<li>${err}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          `;
+          window.scrollTo({ top: 100, behavior: 'smooth' });
+          return;
+        }
+
+        // Success: Redirect to Itinerary page
+        window.location.href = 'itinerary.html';
+      });
+    });
+  </script>
+</body>
+</html>

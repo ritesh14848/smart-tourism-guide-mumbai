@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Map & Navigation - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link active"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2rem;">
+      
+      <!-- Top Map Controls Bar -->
+      <div class="map-control-bar">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem;">Interactive Mumbai Map & GPS</h2>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Explore suburban clusters, track your live location, or follow your active itinerary route.
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+          <!-- GPS Tracker Button -->
+          <button id="gps-toggle-btn" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-location-crosshairs"></i> Track My GPS Location
+          </button>
+
+          <!-- Zone Selector -->
+          <select id="map-zone-select" class="form-select" style="width: auto; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+            <option value="all">📍 Whole Mumbai View</option>
+            <option value="South Mumbai">South Mumbai (SoBo)</option>
+            <option value="Western Suburbs">Western Suburbs (Bandra / Juhu)</option>
+            <option value="Central Mumbai">Central Mumbai (Dadar / Worli)</option>
+            <option value="Borivali / National Park">Borivali & National Park</option>
+            <option value="Thane & Suburbs">Thane & Lakes</option>
+            <option value="Navi Mumbai">Navi Mumbai</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter Category Buttons & Day Route Selector -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-sm btn-outline filter-category-btn active" data-cat="all">All Places</button>
+          <button class="btn btn-sm btn-outline filter-category-btn" data-cat="attraction"><i class="fa-solid fa-landmark" style="color: #0284c7;"></i> Attractions</button>
+          <button class="btn btn-sm btn-outline filter-category-btn" data-cat="hotel"><i class="fa-solid fa-hotel" style="color: #10b981;"></i> Hotels</button>
+          <button class="btn btn-sm btn-outline filter-category-btn" data-cat="food"><i class="fa-solid fa-utensils" style="color: #f97316;"></i> Dining & Chaat</button>
+          <button class="btn btn-sm btn-outline filter-category-btn" data-cat="hospital"><i class="fa-solid fa-hospital" style="color: #ef4444;"></i> 24/7 Hospitals</button>
+        </div>
+
+        <div id="route-selector-container" style="display: none; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent);">
+            <i class="fa-solid fa-route"></i> Itinerary Route:
+          </span>
+          <select id="itinerary-day-route-select" class="form-select" style="width: auto; padding: 0.35rem 0.75rem; font-size: 0.85rem;">
+            <!-- Populated if active itinerary exists -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Map Viewport -->
+      <div id="map-viewport"></div>
+
+      <!-- Map Legend & Helpful Tips -->
+      <div class="card" style="margin-top: 1.5rem; padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.85rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #0284c7; border-radius: 50%;"></span>
+              <strong>Attractions</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></span>
+              <strong>Hotels & Hostels</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #f97316; border-radius: 50%;"></span>
+              <strong>Food & Street Stalls</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="display: inline-block; width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></span>
+              <strong>24/7 Trauma Hospitals</strong>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <span style="display: inline-block; width: 16px; height: 4px; background: #f97316;"></span>
+              <strong>Day Itinerary Route</strong>
+            </div>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted);">
+            <i class="fa-solid fa-circle-info"></i> Click any pin for entry tickets, contacts, or emergency hospital numbers.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/storage.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeCategory = 'all';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await MapService.initMap('map-viewport');
+
+      // Check if itinerary route exists
+      const itinerary = StorageService.getItinerary();
+      const routeContainer = document.getElementById('route-selector-container');
+      const routeSelect = document.getElementById('itinerary-day-route-select');
+
+      if (itinerary && itinerary.dayPlans && itinerary.dayPlans.length > 0) {
+        routeContainer.style.display = 'flex';
+        routeSelect.innerHTML = '';
+        itinerary.dayPlans.forEach((dp, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          opt.text = `Day ${dp.dayNumber}: ${dp.title.split(':')[1] || dp.title}`;
+          routeSelect.appendChild(opt);
+        });
+
+        routeSelect.addEventListener('change', () => {
+          MapService.renderActiveItineraryRoute(parseInt(routeSelect.value, 10));
+        });
+
+        // Initial render for day 1
+        MapService.renderActiveItineraryRoute(0);
+      }
+
+      // Zone change
+      document.getElementById('map-zone-select').addEventListener('change', (e) => {
+        MapService.panToZone(e.target.value);
+      });
+
+      // Category filter buttons
+      const catBtns = document.querySelectorAll('.filter-category-btn');
+      catBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          catBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeCategory = btn.getAttribute('data-cat');
+          MapService.loadAllMapData(activeCategory, document.getElementById('map-zone-select').value);
+        });
+      });
+
+      // GPS Toggle
+      const gpsBtn = document.getElementById('gps-toggle-btn');
+      let isGpsActive = false;
+
+      gpsBtn.addEventListener('click', () => {
+        if (!isGpsActive) {
+          gpsBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Locating GPS...';
+          const started = MapService.toggleGPS(
+            (pos) => {
+              isGpsActive = true;
+              gpsBtn.classList.remove('btn-primary');
+              gpsBtn.classList.add('btn-success');
+              gpsBtn.innerHTML = '<i class="fa-solid fa-circle-dot fa-fade"></i> GPS Active (Tracking)';
+              showToast(`📍 GPS Locked! Location accuracy: ~${Math.round(pos.accuracy)}m`, 'success');
+            },
+            (errMsg) => {
+              gpsBtn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Track My GPS Location';
+              showToast(errMsg, 'warning');
+            }
+          );
+        } else {
+          MapService.toggleGPS();
+          isGpsActive = false;
+          gpsBtn.classList.remove('btn-success');
+          gpsBtn.classList.add('btn-primary');
+          gpsBtn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i> Track My GPS Location';
+          showToast('GPS tracking disabled.', 'info');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

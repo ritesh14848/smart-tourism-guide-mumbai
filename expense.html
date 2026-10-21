@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker & Feedback - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link active"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2.5rem;">
+      
+      <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+        <span class="section-subtitle">Real-Time Travel Ledger</span>
+        <h1 class="section-title">Expense Tracker & Trip Feedback</h1>
+        <p style="color: var(--text-muted); margin-top: 0.5rem;">
+          Track your actual spending in Mumbai against your planned budget and share your travel experience.
+        </p>
+      </div>
+
+      <!-- Expense Summary Cards -->
+      <div class="expense-summary-grid">
+        <div class="expense-stat-card">
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Allocated Budget</span>
+          <div class="val" id="stat-budget">₹0</div>
+        </div>
+        <div class="expense-stat-card">
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Total Spent</span>
+          <div class="val" style="color: #0284c7;" id="stat-spent">₹0</div>
+        </div>
+        <div class="expense-stat-card">
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Remaining Balance</span>
+          <div class="val" style="color: #047857;" id="stat-remaining">₹0</div>
+        </div>
+        <div class="expense-stat-card">
+          <span style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Budget Utilization</span>
+          <div class="val" id="stat-percent">0%</div>
+        </div>
+      </div>
+
+      <!-- Budget Consumption Progress Bar -->
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">
+          <span>Budget Burn Rate</span>
+          <span id="burn-rate-label">0% Used</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="budget-progress-fill" class="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Layout: Add Expense Form + Expenses Table -->
+      <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 4rem;">
+        
+        <!-- Add Expense Card -->
+        <div class="card" style="height: fit-content;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1.25rem;">
+            <i class="fa-solid fa-receipt" style="color: var(--primary);"></i> Log An Expense
+          </h3>
+
+          <form id="add-expense-form">
+            <div class="form-group">
+              <label class="form-label">Expense Title / Vendor</label>
+              <input type="text" id="exp-desc" class="form-control" placeholder="e.g. Bandra Auto Rickshaw, Vada Pav stall..." required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select id="exp-category" class="form-select" required>
+                <option value="Food & Dining">Food & Dining</option>
+                <option value="Transit & Cabs">Transit & Cabs</option>
+                <option value="Accommodation">Accommodation</option>
+                <option value="Sightseeing & Entry">Sightseeing & Entry</option>
+                <option value="Shopping & Souvenirs">Shopping & Souvenirs</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Amount (₹ INR)</label>
+              <input type="number" id="exp-amount" class="form-control" placeholder="e.g. 150" min="1" step="1" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-plus"></i> Add to Ledger
+            </button>
+          </form>
+        </div>
+
+        <!-- Ledger Table Card -->
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800;">Logged Expenditures</h3>
+            <button id="clear-ledger-btn" class="btn btn-sm btn-outline" style="color: var(--danger);">
+              <i class="fa-solid fa-trash-can"></i> Clear Ledger
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-tbody">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Trip Feedback Section (Activity Diagram Flow Complete) -->
+      <div id="feedback" class="card" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); margin-bottom: 3rem;">
+        <div class="section-header" style="text-align: left; margin-bottom: 1.5rem;">
+          <span class="section-subtitle">Trip Completion</span>
+          <h2 style="font-size: 1.8rem; font-weight: 800;">Tourist Feedback & Experience Rating</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Help future travelers by rating your journey through Mumbai and its suburbs.
+          </p>
+        </div>
+
+        <form id="feedback-form">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="form-group">
+              <label class="form-label">Overall Experience Rating</label>
+              <select id="fb-rating" class="form-select">
+                <option value="5">⭐⭐⭐⭐⭐ Excellent (5/5)</option>
+                <option value="4" selected>⭐⭐⭐⭐ Great (4/5)</option>
+                <option value="3">⭐⭐⭐ Average (3/5)</option>
+                <option value="2">⭐⭐ Needs Improvement (2/5)</option>
+                <option value="1">⭐ Poor (1/5)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Did the zone clustering save you commute time?</label>
+              <select id="fb-clustering" class="form-select">
+                <option value="yes">Yes, significantly avoided Mumbai traffic</option>
+                <option value="somewhat">Somewhat helpful</option>
+                <option value="no">No difference</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Favorite Mumbai Suburb or Attraction</label>
+            <input type="text" id="fb-favorite" class="form-control" placeholder="e.g. Kanheri Caves, Marine Drive Sunset, Britannia Parsi cafe...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Feedback & Recommendations</label>
+            <textarea id="fb-comments" class="form-control" rows="3" placeholder="Share your insights on local travel, auto behavior, or hidden gems..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-lg">
+            <i class="fa-solid fa-paper-plane"></i> Submit Trip Review
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLedger();
+
+      // Form submission
+      document.getElementById('add-expense-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const desc = document.getElementById('exp-desc').value;
+        const category = document.getElementById('exp-category').value;
+        const amount = parseFloat(document.getElementById('exp-amount').value);
+
+        if (!desc || isNaN(amount) || amount <= 0) {
+          showToast('Please enter a valid expense title and amount', 'warning');
+          return;
+        }
+
+        StorageService.addExpense({
+          description: desc,
+          category,
+          amount
+        });
+
+        document.getElementById('exp-desc').value = '';
+        document.getElementById('exp-amount').value = '';
+
+        showToast(`Logged ₹${amount} for ${desc}`, 'success');
+        renderLedger();
+      });
+
+      // Clear button
+      document.getElementById('clear-ledger-btn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear your expense ledger?')) {
+          StorageService.clearExpenses();
+          renderLedger();
+          showToast('Expense ledger cleared.', 'info');
+        }
+      });
+
+      // Feedback form
+      document.getElementById('feedback-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const rating = document.getElementById('fb-rating').value;
+        const clustering = document.getElementById('fb-clustering').value;
+        const favorite = document.getElementById('fb-favorite').value;
+        const comments = document.getElementById('fb-comments').value;
+
+        StorageService.saveFeedback({
+          rating,
+          clustering,
+          favorite,
+          comments
+        });
+
+        showToast('🎉 Thank you! Your Mumbai trip review has been recorded.', 'success');
+        document.getElementById('feedback-form').reset();
+      });
+    });
+
+    function renderLedger() {
+      const itinerary = StorageService.getItinerary();
+      const allocatedBudget = itinerary ? itinerary.totalBudget : 10000;
+      const expenses = StorageService.getExpenses();
+
+      const totalSpent = expenses.reduce((sum, item) => sum + Number(item.amount), 0);
+      const remaining = allocatedBudget - totalSpent;
+      const percentUsed = Math.min(100, Math.round((totalSpent / allocatedBudget) * 100));
+
+      document.getElementById('stat-budget').innerText = formatINR(allocatedBudget);
+      document.getElementById('stat-spent').innerText = formatINR(totalSpent);
+      
+      const remEl = document.getElementById('stat-remaining');
+      remEl.innerText = formatINR(remaining);
+      remEl.style.color = remaining >= 0 ? '#047857' : '#ef4444';
+
+      document.getElementById('stat-percent').innerText = `${percentUsed}%`;
+      document.getElementById('burn-rate-label').innerText = `${percentUsed}% Used (${formatINR(totalSpent)} of ${formatINR(allocatedBudget)})`;
+
+      const barFill = document.getElementById('budget-progress-fill');
+      barFill.style.width = `${percentUsed}%`;
+      barFill.className = 'progress-bar-fill';
+      if (percentUsed >= 95) barFill.classList.add('danger');
+      else if (percentUsed >= 75) barFill.classList.add('warning');
+
+      // Render table rows
+      const tbody = document.getElementById('expenses-tbody');
+      tbody.innerHTML = '';
+
+      if (expenses.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+              No expenses recorded yet. Use the form on the left to track cab fares, meals, and entry tickets.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      expenses.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${item.description}</strong></td>
+          <td><span class="badge badge-primary">${item.category}</span></td>
+          <td style="font-weight: 700;">₹${Number(item.amount).toLocaleString()}</td>
+          <td>
+            <button class="btn btn-sm btn-outline del-exp-btn" data-id="${item.id}" style="padding: 0.2rem 0.5rem; color: var(--danger);">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        `;
+
+        tr.querySelector('.del-exp-btn').addEventListener('click', () => {
+          StorageService.deleteExpense(item.id);
+          renderLedger();
+          showToast('Expense removed', 'info');
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>

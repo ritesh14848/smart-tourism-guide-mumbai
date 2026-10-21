@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Mumbai Itinerary - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Canvas Confetti for celebratory begin trip transition -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link active"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2rem;">
+
+      <!-- Container when no itinerary exists -->
+      <div id="no-itinerary-view" style="display: none; text-align: center; padding: 4rem 1rem;">
+        <div style="font-size: 3.5rem; color: #cbd5e1; margin-bottom: 1.5rem;">
+          <i class="fa-solid fa-map-location-dot"></i>
+        </div>
+        <h2 style="font-size: 1.8rem; margin-bottom: 0.75rem;">No Mumbai Itinerary Found</h2>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem;">
+          You haven't generated a trip plan yet. Choose your dates, budget, and interests to generate a day-wise plan.
+        </p>
+        <a href="planner.html" class="btn btn-accent btn-lg">
+          <i class="fa-solid fa-sparkles"></i> Plan a New Trip
+        </a>
+      </div>
+
+      <!-- Main Itinerary View -->
+      <div id="itinerary-content-view" style="display: none;">
+        
+        <!-- Top Stats & Header Bar -->
+        <div class="itinerary-header-bar">
+          <div>
+            <span class="badge badge-primary" style="margin-bottom: 0.5rem;" id="badge-dest-days">Mumbai & Suburbs</span>
+            <h2 style="font-size: 1.7rem; font-weight: 800;" id="itinerary-main-heading">Day-Wise Tour Itinerary</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted);" id="itinerary-hotel-summary">Hotel info loading...</p>
+          </div>
+
+          <div class="itinerary-stats">
+            <div class="itinerary-stat-item">
+              <span class="itinerary-stat-label">Total Budget</span>
+              <span class="itinerary-stat-val" id="stat-total-budget">₹0</span>
+            </div>
+            <div class="itinerary-stat-item">
+              <span class="itinerary-stat-label">Est. Spend</span>
+              <span class="itinerary-stat-val" style="color: #047857;" id="stat-est-spend">₹0</span>
+            </div>
+            <div class="itinerary-stat-item">
+              <span class="itinerary-stat-label">Savings/Buffer</span>
+              <span class="itinerary-stat-val" style="color: #0284c7;" id="stat-buffer">₹0</span>
+            </div>
+          </div>
+
+          <div>
+            <button onclick="window.print()" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-print"></i> Print / Save PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- In-Trip Notification Banner (Visible when trip has started) -->
+        <div id="in-trip-active-banner" class="alert alert-success" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fa-solid fa-compass fa-spin" style="font-size: 1.4rem;"></i>
+            <div>
+              <strong>Your Mumbai Trip is Currently Live!</strong>
+              <div style="font-size: 0.85rem;">Use in-trip tools below: Live GPS navigation, Auto fare guide, Voice translator & Expense ledger.</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="map.html" class="btn btn-sm btn-primary"><i class="fa-solid fa-location-crosshairs"></i> Open GPS Map</a>
+            <a href="expense.html" class="btn btn-sm btn-accent"><i class="fa-solid fa-receipt"></i> Log Expense</a>
+            <button id="end-trip-btn" class="btn btn-sm btn-outline"><i class="fa-solid fa-circle-check"></i> Complete Trip</button>
+          </div>
+        </div>
+
+        <!-- Day Filter Tabs -->
+        <div class="day-tabs" id="day-selector-tabs">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Day Cards Container -->
+        <div id="day-cards-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Activity Diagram Decision Loop Bar -->
+        <div class="satisfaction-bar">
+          <div class="satisfaction-text">
+            <h4><i class="fa-solid fa-circle-question" style="color: #38bdf8;"></i> Is this itinerary satisfactory?</h4>
+            <p id="satisfaction-subtitle">
+              Review your stops, hotel selection, and transit times. You can modify preferences or begin your trip right now.
+            </p>
+          </div>
+
+          <div class="satisfaction-actions">
+            <!-- Modify Preferences Loop -->
+            <a href="planner.html" class="btn btn-outline-white" id="modify-plan-btn">
+              <i class="fa-solid fa-pen-to-square"></i> Modify Preferences
+            </a>
+            <!-- Begin Trip Fork -->
+            <button type="button" class="btn btn-accent btn-lg" id="begin-trip-btn">
+              <i class="fa-solid fa-rocket"></i> Begin Trip
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const noItinView = document.getElementById('no-itinerary-view');
+      const contentView = document.getElementById('itinerary-content-view');
+      const itinerary = StorageService.getItinerary();
+
+      if (!itinerary || !itinerary.dayPlans || itinerary.dayPlans.length === 0) {
+        noItinView.style.display = 'block';
+        return;
+      }
+
+      contentView.style.display = 'block';
+      renderItinerary(itinerary);
+      checkTripStatus();
+
+      // Begin Trip Handler
+      document.getElementById('begin-trip-btn').addEventListener('click', () => {
+        StorageService.setTripStatus('in_progress');
+        
+        // Fire confetti celebration
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
+          });
+        }
+
+        showToast('🚀 Trip Activated! In-trip tools unlocked (GPS, Translation, Expense Tracker).', 'success');
+        checkTripStatus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // Complete Trip Handler
+      document.getElementById('end-trip-btn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to finish your Mumbai trip? This will take you to log final expenses and submit your review.')) {
+          StorageService.setTripStatus('completed');
+          window.location.href = 'expense.html#feedback';
+        }
+      });
+    });
+
+    function checkTripStatus() {
+      const status = StorageService.getTripStatus();
+      const inTripBanner = document.getElementById('in-trip-active-banner');
+      const beginTripBtn = document.getElementById('begin-trip-btn');
+      const satSubtitle = document.getElementById('satisfaction-subtitle');
+
+      if (status === 'in_progress') {
+        inTripBanner.style.display = 'flex';
+        beginTripBtn.disabled = true;
+        beginTripBtn.innerHTML = '<i class="fa-solid fa-check-double"></i> Trip in Progress';
+        beginTripBtn.classList.remove('btn-accent');
+        beginTripBtn.classList.add('btn-success');
+        satSubtitle.innerText = 'Trip is active! Access GPS, translation, and expense logging tools at any time.';
+      } else if (status === 'completed') {
+        inTripBanner.style.display = 'none';
+        beginTripBtn.disabled = true;
+        beginTripBtn.innerHTML = '<i class="fa-solid fa-flag-checkered"></i> Trip Completed';
+        satSubtitle.innerText = 'Your journey has concluded. View your logged expenses and submit feedback.';
+      }
+    }
+
+    function renderItinerary(data) {
+      document.getElementById('badge-dest-days').innerText = `${data.destination} • ${data.days} Days • ${data.pace.toUpperCase()} Pace`;
+      document.getElementById('stat-total-budget').innerText = formatINR(data.totalBudget);
+      document.getElementById('stat-est-spend').innerText = formatINR(data.totalEstimatedSpend);
+      
+      const buffer = data.remainingBudget;
+      const bufferEl = document.getElementById('stat-buffer');
+      bufferEl.innerText = (buffer >= 0 ? '+' : '') + formatINR(buffer);
+      if (buffer < 0) bufferEl.style.color = '#ef4444';
+
+      const hotel = data.chosenHotel;
+      document.getElementById('itinerary-hotel-summary').innerHTML = `
+        <strong>Recommended Stay:</strong> ${hotel.name} (${hotel.suburb}) &bull;
+        <span style="color: #047857; font-weight: 700;">₹${hotel.pricePerNight.toLocaleString()}/night</span> &bull;
+        ⭐ ${hotel.rating}/5.0 (${hotel.category})
+      `;
+
+      // Render Day Tabs
+      const tabsContainer = document.getElementById('day-selector-tabs');
+      tabsContainer.innerHTML = `
+        <button class="day-tab-btn active" data-target="all">All Days (${data.days})</button>
+      `;
+
+      data.dayPlans.forEach((day, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'day-tab-btn';
+        btn.setAttribute('data-target', `day-card-${day.dayNumber}`);
+        btn.innerText = `Day ${day.dayNumber}`;
+        tabsContainer.appendChild(btn);
+      });
+
+      // Tab Click Handling
+      tabsContainer.querySelectorAll('.day-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabsContainer.querySelectorAll('.day-tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const target = btn.getAttribute('data-target');
+          const cards = document.querySelectorAll('.day-card');
+          if (target === 'all') {
+            cards.forEach(c => c.style.display = 'block');
+          } else {
+            cards.forEach(c => {
+              c.style.display = (c.id === target) ? 'block' : 'none';
+            });
+          }
+        });
+      });
+
+      // Render Day Cards
+      const cardsList = document.getElementById('day-cards-list');
+      cardsList.innerHTML = '';
+
+      data.dayPlans.forEach(day => {
+        const dayCard = document.createElement('div');
+        dayCard.className = 'day-card';
+        dayCard.id = `day-card-${day.dayNumber}`;
+
+        let timelineHtml = '';
+        day.timeline.forEach(item => {
+          const isFood = item.type === 'food';
+          const icon = isFood ? 'fa-utensils' : 'fa-landmark';
+          const dotClass = isFood ? 'timeline-dot food' : 'timeline-dot';
+
+          timelineHtml += `
+            <div class="timeline-item">
+              <div class="${dotClass}"></div>
+              <div class="timeline-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span class="timeline-time"><i class="fa-regular fa-clock"></i> ${item.time}</span>
+                  <span class="badge ${isFood ? 'badge-accent' : 'badge-primary'}">
+                    <i class="fa-solid ${icon}"></i> ${isFood ? item.cuisine : item.category}
+                  </span>
+                </div>
+                <h4 class="timeline-title">${item.title}</h4>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 6px;">
+                  📍 ${item.suburb} ${isFood ? `&bull; <strong>Specialty:</strong> ${item.specialty}` : ''}
+                </p>
+                <p class="timeline-details">${item.description}</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 0.85rem;">
+                  <span>
+                    ${isFood
+                      ? `Est. Cost: <strong>₹${item.estimatedCost}</strong>`
+                      : `Entry Ticket: <strong>${item.entryFee === 0 ? 'Free' : '₹' + item.entryFee}</strong>`}
+                  </span>
+                  ${item.lat && item.lng ? `
+                    <a href="map.html" class="btn btn-sm btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">
+                      <i class="fa-solid fa-location-arrow"></i> View on Map
+                    </a>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        dayCard.innerHTML = `
+          <div class="day-card-header">
+            <div>
+              <h3 class="day-card-title">${day.title}</h3>
+              <p style="font-size: 0.9rem; color: var(--text-muted);">${day.theme}</p>
+            </div>
+            <div style="text-align: right;">
+              <span class="badge badge-neutral" style="font-size: 0.85rem;">
+                Day Total: <strong>₹${day.summary.dayTotal.toLocaleString()}</strong>
+              </span>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">
+                (Tickets: ₹${day.summary.entryFees} | Food: ₹${day.summary.meals} | Transit: ₹${day.summary.transit})
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline">
+            ${timelineHtml}
+          </div>
+        `;
+
+        cardsList.appendChild(dayCard);
+      });
+    }
+  </script>
+</body>
+</html>

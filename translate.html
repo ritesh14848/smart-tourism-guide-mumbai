@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice & Phrasebook Translator - Smart Tourism Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <div class="brand-text">Mumbai<span>Guide</span></div>
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+        <li><a href="planner.html" class="nav-link"><i class="fa-solid fa-calendar-plus"></i> Plan Trip</a></li>
+        <li><a href="itinerary.html" class="nav-link"><i class="fa-solid fa-route"></i> Itinerary</a></li>
+        <li><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass-drafting"></i> Explore</a></li>
+        <li><a href="map.html" class="nav-link"><i class="fa-solid fa-map-location-dot"></i> Live Map</a></li>
+        <li><a href="translate.html" class="nav-link active"><i class="fa-solid fa-language"></i> Translator</a></li>
+        <li><a href="expense.html" class="nav-link"><i class="fa-solid fa-wallet"></i> Expenses</a></li>
+        <li><a href="emergency.html" class="nav-link nav-emergency-btn"><i class="fa-solid fa-triangle-exclamation"></i> SOS 112</a></li>
+        <li id="nav-trip-status"></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 2.5rem;">
+      
+      <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+        <span class="section-subtitle">Multilingual Travel Assistance</span>
+        <h1 class="section-title">Voice Translator & Mumbai Phrasebook</h1>
+        <p style="color: var(--text-muted); margin-top: 0.5rem;">
+          Communicate effortlessly with Mumbai auto drivers, street vendors, and locals using voice speech-to-text, audio pronunciation, and instant survival phrases.
+        </p>
+      </div>
+
+      <!-- Live Voice / Text Translation Grid -->
+      <div class="translation-grid" style="margin-bottom: 3rem;">
+        
+        <!-- Source Input Box -->
+        <div class="translation-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <label class="form-label" style="margin: 0; font-weight: 700;">English Input</label>
+            <button id="mic-btn" class="btn btn-sm btn-outline" style="border-radius: var(--radius-full);">
+              <i class="fa-solid fa-microphone" style="color: var(--primary);"></i> Tap to Speak
+            </button>
+          </div>
+
+          <textarea id="source-text" class="translation-textarea" placeholder="Speak or type what you want to say in English (e.g. Please run by the meter, Where is Gateway of India?)..."></textarea>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+            <span id="speech-status" style="font-size: 0.8rem; color: var(--text-muted);">Ready for voice or text</span>
+            <button id="translate-btn" class="btn btn-primary">
+              <i class="fa-solid fa-language"></i> Translate
+            </button>
+          </div>
+        </div>
+
+        <!-- Target Output Box -->
+        <div class="translation-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <label class="form-label" style="margin: 0; font-weight: 700;">Target:</label>
+              <select id="target-lang-select" class="form-select" style="padding: 0.25rem 0.6rem; font-size: 0.85rem; width: auto;">
+                <option value="mr" selected>Marathi (Official)</option>
+                <option value="hi">Hindi (Bambaiya / Hindi)</option>
+              </select>
+            </div>
+
+            <button id="speak-btn" class="btn btn-sm btn-accent" style="border-radius: var(--radius-full);">
+              <i class="fa-solid fa-volume-high"></i> Listen Aloud
+            </button>
+          </div>
+
+          <div id="target-output" class="translation-textarea" style="background-color: var(--bg-subtle); overflow-y: auto; font-size: 1.15rem; font-weight: 600; color: #0f172a;">
+            Translation will appear here...
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Powered by Web Speech API & MyMemory</span>
+            <button id="copy-btn" class="btn btn-sm btn-outline">
+              <i class="fa-solid fa-copy"></i> Copy
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Curated Mumbai Survival Phrasebook -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <h3 style="font-size: 1.4rem; font-weight: 800;">Mumbai Street Phrasebook</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Tap any speaker icon to play native audio for the listener.</p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-sm btn-outline phrase-filter-btn active" data-filter="all">All</button>
+            <button class="btn btn-sm btn-outline phrase-filter-btn" data-filter="Transport & Auto">🚖 Auto & Transit</button>
+            <button class="btn btn-sm btn-outline phrase-filter-btn" data-filter="Food & Dining">☕ Chai & Food</button>
+            <button class="btn btn-sm btn-outline phrase-filter-btn" data-filter="Shopping & Bargaining">🛍️ Bargaining</button>
+            <button class="btn btn-sm btn-outline phrase-filter-btn" data-filter="Emergency & Directions">🚨 Emergency</button>
+          </div>
+        </div>
+
+        <div class="phrase-grid" id="phrase-cards-container">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Smart Tourism Guide: Mumbai & Suburbs. Pure Static Architecture.</p>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script src="js/translate.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const srcInput = document.getElementById('source-text');
+      const targetOutput = document.getElementById('target-output');
+      const targetLangSelect = document.getElementById('target-lang-select');
+      const micBtn = document.getElementById('mic-btn');
+      const speakBtn = document.getElementById('speak-btn');
+      const copyBtn = document.getElementById('copy-btn');
+      const translateBtn = document.getElementById('translate-btn');
+      const speechStatus = document.getElementById('speech-status');
+
+      renderPhrases('all');
+
+      // Translation Action
+      async function doTranslation() {
+        const text = srcInput.value;
+        if (!text.trim()) {
+          showToast('Please enter or speak text to translate', 'warning');
+          return;
+        }
+
+        targetOutput.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Translating...';
+        const lang = targetLangSelect.value;
+        const result = await TranslateService.translateText(text, lang);
+        targetOutput.innerText = result;
+      }
+
+      translateBtn.addEventListener('click', doTranslation);
+      targetLangSelect.addEventListener('change', () => {
+        if (srcInput.value.trim()) doTranslation();
+      });
+
+      // Mic Voice Input
+      let isListening = false;
+      micBtn.addEventListener('click', () => {
+        if (!isListening) {
+          speechStatus.innerText = '🎙️ Listening... Speak into your microphone';
+          micBtn.classList.remove('btn-outline');
+          micBtn.classList.add('btn-danger');
+          micBtn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop Listening';
+
+          TranslateService.startVoiceInput(
+            (transcript) => {
+              srcInput.value = transcript;
+              speechStatus.innerText = 'Voice captured!';
+              micBtn.classList.remove('btn-danger');
+              micBtn.classList.add('btn-outline');
+              micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Tap to Speak';
+              isListening = false;
+              doTranslation();
+            },
+            (errorMsg) => {
+              speechStatus.innerText = errorMsg;
+              micBtn.classList.remove('btn-danger');
+              micBtn.classList.add('btn-outline');
+              micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Tap to Speak';
+              isListening = false;
+              showToast(errorMsg, 'warning');
+            }
+          );
+          isListening = true;
+        } else {
+          TranslateService.stopVoiceInput();
+          speechStatus.innerText = 'Listening stopped';
+          micBtn.classList.remove('btn-danger');
+          micBtn.classList.add('btn-outline');
+          micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i> Tap to Speak';
+          isListening = false;
+        }
+      });
+
+      // Speech Synthesis Audio Playback
+      speakBtn.addEventListener('click', () => {
+        const textToSpeak = targetOutput.innerText;
+        if (!textToSpeak || textToSpeak.includes('will appear here')) {
+          showToast('No translated text to speak', 'warning');
+          return;
+        }
+        const langCode = targetLangSelect.value === 'mr' ? 'mr-IN' : 'hi-IN';
+        TranslateService.speakText(textToSpeak, langCode);
+      });
+
+      // Copy to Clipboard
+      copyBtn.addEventListener('click', () => {
+        const text = targetOutput.innerText;
+        if (text && !text.includes('will appear here')) {
+          navigator.clipboard.writeText(text);
+          showToast('Copied to clipboard!', 'success');
+        }
+      });
+
+      // Phrase category filters
+      const filterBtns = document.querySelectorAll('.phrase-filter-btn');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderPhrases(btn.getAttribute('data-filter'));
+        });
+      });
+    });
+
+    function renderPhrases(category) {
+      const container = document.getElementById('phrase-cards-container');
+      container.innerHTML = '';
+
+      const filtered = category === 'all' 
+        ? TranslateService.PHRASES 
+        : TranslateService.PHRASES.filter(p => p.category === category);
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'phrase-card';
+        card.innerHTML = `
+          <div class="phrase-text-group" style="flex: 1; padding-right: 0.75rem;">
+            <h5>${p.english}</h5>
+            <p style="color: var(--primary); font-weight: 600; margin-bottom: 2px;">
+              <strong>Marathi:</strong> ${p.marathi}
+            </p>
+            <p style="color: var(--accent); font-weight: 500;">
+              <strong>Hindi:</strong> ${p.hindi}
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-sm btn-primary play-phrase-btn" style="border-radius: 50%; width: 36px; height: 36px; padding: 0;" title="Speak Marathi phrase">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+        `;
+
+        card.querySelector('.play-phrase-btn').addEventListener('click', () => {
+          // Speak Marathi phrase
+          TranslateService.speakText(p.marathi.split('(')[0], 'mr-IN');
+        });
+
+        container.appendChild(card);
+      });
+    }
+  </script>
+</body>
+</html>

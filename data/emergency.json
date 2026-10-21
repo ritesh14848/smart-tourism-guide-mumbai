@@ -1,0 +1,166 @@
+{
+  "nationalHelplines": [
+    {
+      "title": "National Emergency SOS",
+      "number": "112",
+      "description": "Unified all-in-one emergency service for Police, Ambulance, and Fire across India.",
+      "icon": "fa-phone-volume",
+      "priority": "critical"
+    },
+    {
+      "title": "Mumbai Police Control Room",
+      "number": "100",
+      "description": "Direct line to Greater Mumbai Police Headquarters for immediate law & order assistance.",
+      "icon": "fa-shield-halved",
+      "priority": "high"
+    },
+    {
+      "title": "Government Ambulance Service",
+      "number": "108",
+      "description": "Free 24/7 emergency medical response and life-support ambulance dispatch.",
+      "icon": "fa-truck-medical",
+      "priority": "high"
+    },
+    {
+      "title": "Fire & Rescue Brigade",
+      "number": "101",
+      "description": "Mumbai Fire Brigade control center for fires, building collapses, and water rescue.",
+      "icon": "fa-fire-extinguisher",
+      "priority": "high"
+    },
+    {
+      "title": "Tourist Helpline (24x7 Multi-lingual)",
+      "number": "1363",
+      "description": "Toll-free Incredible India helpline in English, Hindi, and 10 foreign languages.",
+      "icon": "fa-compass",
+      "priority": "medium"
+    },
+    {
+      "title": "BMC Disaster Management Cell",
+      "number": "1916",
+      "description": "Municipal Corporation of Greater Mumbai control room for heavy monsoon waterlogging, tree falls, and civic disasters.",
+      "icon": "fa-cloud-showers-heavy",
+      "priority": "medium"
+    },
+    {
+      "title": "Mumbai Women Safety Helpline",
+      "number": "103",
+      "description": "Dedicated 24/7 Nirbhaya squad response for women and children facing harassment.",
+      "icon": "fa-person-dress",
+      "priority": "high"
+    },
+    {
+      "title": "Railway Police Helpline (GRP)",
+      "number": "1512",
+      "description": "Direct emergency response inside local train coaches and railway stations.",
+      "icon": "fa-train",
+      "priority": "medium"
+    }
+  ],
+  "hospitals": [
+    {
+      "id": "hosp-1",
+      "name": "Lilavati Hospital & Research Centre",
+      "zone": "Western Suburbs",
+      "suburb": "Bandra West",
+      "address": "A-791, Bandra Reclamation, Bandra West, Mumbai 400050",
+      "phone": "+91 22 2675 1000",
+      "casualtyPhone": "+91 22 2656 8063",
+      "lat": 19.0515,
+      "lng": 72.8298,
+      "facilities": ["24/7 Emergency & Trauma", "Cardiology ICU", "Blood Bank", "Pharmacy"],
+      "mapsUrl": "https://maps.google.com/?q=Lilavati+Hospital+Bandra+Mumbai"
+    },
+    {
+      "id": "hosp-2",
+      "name": "Kokilaben Dhirubhai Ambani Hospital",
+      "zone": "Western Suburbs",
+      "suburb": "Andheri West",
+      "address": "Rao Saheb Achutrao Patwardhan Marg, Four Bungalows, Andheri West, Mumbai 400053",
+      "phone": "+91 22 4269 6969",
+      "casualtyPhone": "+91 22 4269 9999",
+      "lat": 19.1311,
+      "lng": 72.8252,
+      "facilities": ["Full Trauma Center", "Helipad", "24/7 Diagnostics", "Pediatric ICU"],
+      "mapsUrl": "https://maps.google.com/?q=Kokilaben+Hospital+Andheri+Mumbai"
+    },
+    {
+      "id": "hosp-3",
+      "name": "Bombay Hospital & Medical Research Centre",
+      "zone": "South Mumbai",
+      "suburb": "Marine Lines / Fort",
+      "address": "12, Marine Lines, Mumbai 400020 (near Fashion Street)",
+      "phone": "+91 22 2206 7676",
+      "casualtyPhone": "+91 22 2208 2486",
+      "lat": 18.9392,
+      "lng": 72.8290,
+      "facilities": ["24/7 Casualty", "Stroke Clinic", "In-house MRI/CT", "Cardiac Care"],
+      "mapsUrl": "https://maps.google.com/?q=Bombay+Hospital+Marine+Lines+Mumbai"
+    },
+    {
+      "id": "hosp-4",
+      "name": "P. D. Hinduja National Hospital",
+      "zone": "Central Mumbai",
+      "suburb": "Mahim West",
+      "address": "Veer Savarkar Marg, Mahim, Mumbai 400016",
+      "phone": "+91 22 2445 1515",
+      "casualtyPhone": "+91 22 2445 2222",
+      "lat": 19.0330,
+      "lng": 72.8398,
+      "facilities": ["Level 1 Trauma Center", "24hr Pharmacy", "Infection Control", "Ambulance fleet"],
+      "mapsUrl": "https://maps.google.com/?q=Hinduja+Hospital+Mahim+Mumbai"
+    },
+    {
+      "id": "hosp-5",
+      "name": "Nanavati Max Super Speciality Hospital",
+      "zone": "Western Suburbs",
+      "suburb": "Vile Parle West",
+      "address": "Swami Vivekananda Rd, Besant Nagar, Vile Parle West, Mumbai 400056",
+      "phone": "+91 22 2626 7500",
+      "casualtyPhone": "+91 22 2626 7777",
+      "lat": 19.0964,
+      "lng": 72.8391,
+      "facilities": ["Trauma & Orthopedic Emergency", "Critical Care", "Advanced Radiology"],
+      "mapsUrl": "https://maps.google.com/?q=Nanavati+Hospital+Vile+Parle+Mumbai"
+    },
+    {
+      "id": "hosp-6",
+      "name": "King Edward Memorial (KEM) Hospital",
+      "zone": "Central Mumbai",
+      "suburb": "Parel",
+      "address": "Acharya Donde Marg, Parel, Mumbai 400012",
+      "phone": "+91 22 2410 7000",
+      "casualtyPhone": "+91 22 2413 6051",
+      "lat": 19.0028,
+      "lng": 72.8427,
+      "facilities": ["Major Public Hospital & Level 1 Trauma", "Subsidized/Free Care", "24/7 Emergency Ward"],
+      "mapsUrl": "https://maps.google.com/?q=KEM+Hospital+Parel+Mumbai"
+    },
+    {
+      "id": "hosp-7",
+      "name": "Jupiter Hospital",
+      "zone": "Thane & Suburbs",
+      "suburb": "Thane West",
+      "address": "Eastern Express Hwy, near Viviana Mall, Thane West 400601",
+      "phone": "+91 22 2172 5555",
+      "casualtyPhone": "+91 22 2172 5600",
+      "lat": 19.2085,
+      "lng": 72.9734,
+      "facilities": ["NABH Accredited Tertiary Care", "Cardiac Emergency", "Organ Transplant Center"],
+      "mapsUrl": "https://maps.google.com/?q=Jupiter+Hospital+Thane"
+    },
+    {
+      "id": "hosp-8",
+      "name": "Apollo Hospitals Navi Mumbai",
+      "zone": "Navi Mumbai",
+      "suburb": "CBD Belapur",
+      "address": "Plot # 13, Off Urban Haat, Sector 23, CBD Belapur, Navi Mumbai 400614",
+      "phone": "+91 22 3350 3350",
+      "casualtyPhone": "+91 22 3350 3333",
+      "lat": 19.0189,
+      "lng": 73.0416,
+      "facilities": ["Emergency Air Ambulance", "Cardiac Care Unit", "Trauma and Burns Unit"],
+      "mapsUrl": "https://maps.google.com/?q=Apollo+Hospitals+Navi+Mumbai"
+    }
+  ]
+}
